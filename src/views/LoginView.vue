@@ -10,18 +10,18 @@ const password = ref('');
 const verError = ref(false);
 const mensajeError = ref('');
 const router = useRouter();
-const {loginUser} = useUserStores();
+const { loginUser } = useUserStores();
 const useStores = useUserStores();
-const {isLoading} = storeToRefs(useStores);
+const { isLoading } = storeToRefs(useStores);
 
 const loguearse = async () => {
-    if(!email.value || !password.value) {
+    if (!email.value || !password.value) {
         mensajeError.value = "Los campos no pueden ser vacíos";
         verError.value = true;
         return
     }
     const existeElUsuario = await loginUser(email.value, password.value);
-    
+
     if (existeElUsuario && existeElUsuario.uid) {
         router.push('/')
     } else {
@@ -33,15 +33,25 @@ const loguearse = async () => {
 </script>
 
 <template>
-    <div>
-        <h1>Login</h1>
-        <div class="alert alert-danger" v-if="verError">
-           {{ mensajeError }}
+    <div class="container text-center">
+        <div class="row mb-5">
+            <h1>Login</h1>
+            <div class="alert alert-danger" v-if="verError">
+                {{ mensajeError }}
+            </div>
         </div>
-        <form @submit.prevent="loguearse">
-            <input type="email" placeholder="Ingrese el email" v-model.trim="email">
-            <input type="password" placeholder="password" v-model.trim="password">
-            <button class="btn btn-primary" type="submit" :disabled="isLoading">Crear usuario</button>
-        </form>
+        <div class="row col-md-6 mx-auto">
+            <form @submit.prevent="loguearse">
+                <div class="mb-3">
+                    <input type="email" class="form-control" placeholder="Ingrese el email" v-model.trim="email">
+                </div>
+                <div class="mb-3">
+                    <input type="password" class="form-control" placeholder="password" v-model.trim="password">
+                </div>
+                <div class="mb-3">
+                    <button class="btn btn-primary" type="submit" :disabled="isLoading">Crear usuario</button>
+                </div>
+            </form>
+        </div>
     </div>
 </template>
