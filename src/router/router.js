@@ -4,6 +4,7 @@ import LoginView from "../views/LoginView.vue";
 import RegisterView from "../views/RegisterView.vue";
 import { useUserStores } from "../store/user";
 import { storeToRefs } from "pinia";
+import EditarView from "../views/EditarView.vue";
 
 const requireAuth = async (to, from, next) => {
   const userStore = useUserStores();
@@ -32,6 +33,10 @@ const routes = [
   {
     path: "/register",
     component: RegisterView,
+  },
+  {
+    path: "/editar/:id",
+    component: EditarView,
   },
 ];
 
