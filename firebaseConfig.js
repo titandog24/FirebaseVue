@@ -2,7 +2,7 @@ import { initializeApp } from "firebase/app";
 import { getAuth } from "firebase/auth";
 
 const firebaseConfig = {
-/*keys in firebase*/
+ /*API KEY FIREBASE*/
 };
 
 initializeApp(firebaseConfig);

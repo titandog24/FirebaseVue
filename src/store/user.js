@@ -1,4 +1,4 @@
-import { createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut } from "firebase/auth";
+import { createUserWithEmailAndPassword, onAuthStateChanged, signInWithEmailAndPassword, signOut } from "firebase/auth";
 import { defineStore } from "pinia";
 import { ref } from "vue";
 import { auth } from "../../firebaseConfig";
@@ -29,12 +29,11 @@ export const useUserStores = defineStore('register', () => {
         try {
             const {user} = await signInWithEmailAndPassword(auth, email, password);
             localStorage.setItem('user',JSON.stringify({email: user.email, uid: user.uid}))
+            router.push('/');
             return user;
         } catch (error) {
             console.log(error);
-        } finally {
-            isLoading.value = false;
-        }
+        } 
     }
 
     const logoutUser = async () => {
@@ -48,24 +47,32 @@ export const useUserStores = defineStore('register', () => {
         }
     }
 
-    const obtenerUsuario = async(email = "", password = "") => {
-        isLoading.value = true;
-        try {
-            const usuarioLocalStorage = localStorage.getItem('user');
-            if (usuarioLocalStorage !== null) {
-                userDB.value.userData = JSON.parse(usuarioLocalStorage);
-            } else if(email != '' && password != '') {
-                const {user} = await signInWithEmailAndPassword(auth, email, password);       
+    const authStateChangedPromise = () => {
+        return new Promise((resolve, reject) => {
+          const unsubscribe = onAuthStateChanged(auth, (user) => {
+            if (user) {
                 userDB.value.userData = {email: user.email, uid: user.uid}
-                return user;
+              resolve(user);
+            } else {
+                userDB.value.userData = null
+              resolve(null);            
             }
+          }, (error) => {
+            reject(error); 
+          });
+          return unsubscribe;
+        });
+      }
+      
+      const getAuthUser = async() => {
+        try {
+          const user = await authStateChangedPromise();
+          return user;
         } catch (error) {
-            console.log(error);
-            return null;
-        } finally {
-            isLoading.value = false;
+          console.error("Error en el estado de autenticación:", error);
+          return null;
         }
-    }
+      }
 
-    return {registerUser, obtenerUsuario, loginUser, logoutUser, userDB, isLoading}
+    return {registerUser, loginUser, logoutUser, getAuthUser, userDB, isLoading}
 })

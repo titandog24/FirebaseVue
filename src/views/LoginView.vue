@@ -22,9 +22,7 @@ const loguearse = async () => {
     }
     const existeElUsuario = await loginUser(email.value, password.value);
 
-    if (existeElUsuario && existeElUsuario.uid) {
-        router.push('/')
-    } else {
+    if (!existeElUsuario) {
         mensajeError.value = `No existe el usuario ${email.value} - ${password.value}`;
         verError.value = true;
         return
