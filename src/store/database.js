@@ -7,7 +7,7 @@ import {
   deleteDoc,
   doc,
   getDoc,
-  updateDoc
+  updateDoc,
 } from "firebase/firestore";
 import { defineStore } from "pinia";
 import { ref } from "vue";
@@ -22,6 +22,9 @@ export const useDataBaseStore = defineStore("database", () => {
   const obtenerUrls = async () => {
     loading.value = true;
     try {
+      if (documents.value.length > 0) {
+        return;
+      }
       const q = query(
         collection(db, "urls"),
         where("user", "==", auth.currentUser.uid)
@@ -98,8 +101,15 @@ export const useDataBaseStore = defineStore("database", () => {
     loading.value = true;
     try {
       const docRef = doc(db, "urls", id);
+      const docSnap = await getDoc(docRef);
+
+      if (docSnap.data().user !== auth.currentUser.uid) {
+        throw new Error("No tiene permisos para eliminar el documento");
+      }
+
       await updateDoc(docRef, data);
-      router.push('/');
+      documents.value = [];
+      router.push("/");
     } catch (error) {
       console.log(error);
     } finally {
