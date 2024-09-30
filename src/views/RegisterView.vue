@@ -26,20 +26,20 @@ import { useRouter } from 'vue-router';
 </script>
 
 <template>
-    <div class="container text-center">
-        <div class="row mb-5">
+    <div>
+        <div>
             <h1>Register</h1>
         </div>
-        <div class="row col-md-6 mx-auto">
+        <div>
             <form @submit.prevent="handleSubmit">
-                <div class="mb-3">
-                    <input type="email" class="form-control" placeholder="Ingrese el email" v-model.trim="email">
+                <div>
+                    <input type="email" placeholder="Ingrese el email" v-model.trim="email">
                 </div>
-                <div class="mb-3">
-                    <input type="password" class="form-control" placeholder="password" v-model.trim="password">
+                <div>
+                    <input type="password" placeholder="password" v-model.trim="password">
                 </div>
-                <div class="mb-3">
-                    <button class="btn btn-primary" type="submit" :disabled="isLoading">Crear usuario</button>
+                <div>
+                    <button type="submit" :disabled="isLoading">Crear usuario</button>
                 </div>
             </form>
         </div>

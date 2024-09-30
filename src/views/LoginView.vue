@@ -31,23 +31,23 @@ const loguearse = async () => {
 </script>
 
 <template>
-    <div class="container text-center">
-        <div class="row mb-5">
+    <div>
+        <div>
             <h1>Login</h1>
-            <div class="alert alert-danger" v-if="verError">
+            <div v-if="verError">
                 {{ mensajeError }}
             </div>
         </div>
-        <div class="row col-md-6 mx-auto">
+        <div>
             <form @submit.prevent="loguearse">
-                <div class="mb-3">
-                    <input type="email" class="form-control" placeholder="Ingrese el email" v-model.trim="email">
+                <div>
+                    <input type="email" placeholder="Ingrese el email" v-model.trim="email">
                 </div>
-                <div class="mb-3">
-                    <input type="password" class="form-control" placeholder="password" v-model.trim="password">
+                <div>
+                    <input type="password" placeholder="password" v-model.trim="password">
                 </div>
-                <div class="mb-3">
-                    <button class="btn btn-primary" type="submit" :disabled="isLoading">Crear usuario</button>
+                <div>
+                    <button type="submit" :disabled="isLoading">Crear usuario</button>
                 </div>
             </form>
         </div>

@@ -31,16 +31,16 @@ const handleEdit = async () => {
 </script>
 
 <template>
-    <div class="container">
-        <h1 class="mx-auto text-center">Editar</h1>
-        <div class="row col-md-6 mx-auto mb-3">
-            <label for="" class="form-label">Name</label>
-            <input type="text" class="form-control" name="" id="" aria-describedby="helpId" placeholder=""
+    <div >
+        <h1>Editar</h1>
+        <div>
+            <label for="">Name</label>
+            <input type="text" name="" id="" placeholder=""
                 v-model="url" />
-            <label for="" class="form-label">Short</label>
-            <input type="text" class="form-control mb-3" name="" id="" aria-describedby="helpId" placeholder=""
+            <label for="">Short</label>
+            <input type="text" name="" id="" placeholder=""
                 v-model="shorts" />
-            <button class="btn btn-warning" @click="handleEdit" :disabled="loading">Edit</button>
+            <button @click="handleEdit" :disabled="loading">Edit</button>
         </div>
     </div>
 </template>
