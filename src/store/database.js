@@ -39,6 +39,7 @@ export const useDataBaseStore = defineStore("database", () => {
       });
     } catch (error) {
       console.log(error);
+      return error.code;
     } finally {
       loading.value = false;
     }
@@ -59,6 +60,7 @@ export const useDataBaseStore = defineStore("database", () => {
         });
       } else {
         console.log("ocurre un problema");
+        return error.code;
       }
     } catch (error) {
       console.log(error);
@@ -81,6 +83,7 @@ export const useDataBaseStore = defineStore("database", () => {
       documents.value = documents.value.filter((item) => item.id != id);
     } catch (error) {
       console.log(error);
+      return error.code;
     } finally {
     }
   };
@@ -93,6 +96,7 @@ export const useDataBaseStore = defineStore("database", () => {
       docEdit.value = { name, short, user };
     } catch (error) {
       console.log(error);
+      return error.code;
     } finally {
     }
   };
@@ -112,6 +116,7 @@ export const useDataBaseStore = defineStore("database", () => {
       router.push("/");
     } catch (error) {
       console.log(error);
+      return error.code;
     } finally {
       loading.value = false;
     }

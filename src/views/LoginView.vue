@@ -1,55 +1,78 @@
 <script setup>
 
-import { ref } from 'vue';
+import { reactive, ref } from 'vue';
 import { useUserStores } from '../store/user';
 import { useRouter } from 'vue-router';
 import { storeToRefs } from 'pinia';
 
-const email = ref('');
-const password = ref('');
 const verError = ref(false);
 const mensajeError = ref('');
 const router = useRouter();
-const { loginUser } = useUserStores();
+const { loginUser, obtenerMesajeError } = useUserStores();
 const useStores = useUserStores();
 const { isLoading } = storeToRefs(useStores);
 
-const loguearse = async () => {
-    if (!email.value || !password.value) {
+const formState = reactive({
+    email: '',
+    password: ''
+})
+
+const onFinish = async (value) => {
+    if (!formState.email || !formState.password) {
         mensajeError.value = "Los campos no pueden ser vacíos";
         verError.value = true;
         return
     }
-    const existeElUsuario = await loginUser(email.value, password.value);
+    const existeElUsuario = await loginUser(formState.email, formState.password);
+    const mensaje = await obtenerMesajeError(existeElUsuario);
 
-    if (!existeElUsuario) {
-        mensajeError.value = `No existe el usuario ${email.value} - ${password.value}`;
+    if (mensaje !== '') {
+        isLoading.value = false;
+        mensajeError.value = `${mensaje}`;
         verError.value = true;
         return
     }
 }
+
+const onFinishFailed = async (value) => {
+    console.log(value); 
+}
+
+
 </script>
 
 <template>
-    <div>
-        <div>
+    <a-row>
+        <a-col :xs="{ span: 24 }" :sm="{ span: 12, offset: 6 }" :style="{ textAlign: 'center' }">
             <h1>Login</h1>
             <div v-if="verError">
                 {{ mensajeError }}
             </div>
-        </div>
-        <div>
-            <form @submit.prevent="loguearse">
+        </a-col>
+        <a-col :xs="{ span: 24 }" :sm="{ span: 12, offset: 6 }" :style="{ textAlign: 'center' }">
+            <a-form 
+            name="basiclogin" 
+            autocomplete="off" 
+            layout="vertical"
+            @finish="onFinish"
+            @finishFailed="onFinishFailed"
+            :model="formState">
                 <div>
-                    <input type="email" placeholder="Ingrese el email" v-model.trim="email">
+                    <a-form-item label="Ingresa tu correo" name="email"
+                        :rules="[{ Required: true, message: 'Ingresa tu email', whitespace: true, type:'email'  }]">
+                        <a-input v-model:value="formState.email"></a-input>
+                    </a-form-item>
                 </div>
                 <div>
-                    <input type="password" placeholder="password" v-model.trim="password">
+                    <a-form-item label="Ingresa tu password" name="password"
+                        :rules="[{ Required: true, message: 'Ingresa tu password', min:6, whitespace: true}]">
+                        <a-input-password v-model:value="formState.password" type="password"></a-input-password>
+                    </a-form-item>
                 </div>
                 <div>
-                    <button type="submit" :disabled="isLoading">Crear usuario</button>
+                    <a-button type="primary" :disabled="isLoading" html-type="submit">Iniciar sesion</a-button>
                 </div>
-            </form>
-        </div>
-    </div>
+            </a-form>
+        </a-col>
+    </a-row>
 </template>

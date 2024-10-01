@@ -25,18 +25,22 @@ const routes = [
     path: "/",
     component: HomeView,
     beforeEnter: requireAuth,
+    name:"home",
   },
   {
     path: "/login",
     component: LoginView,
+    name:"login",
   },
   {
     path: "/register",
     component: RegisterView,
+    name:"register",
   },
   {
     path: "/editar/:id",
     component: EditarView,
+    name:"editar"
   },
 ];
 
